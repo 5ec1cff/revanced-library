@@ -331,8 +331,14 @@ object ApkSigner {
             signingExtension = null
         }
 
-        fun signApk(inputApkFile: File, outputApkFile: File) {
+        fun signApk(inputApkFile: File, outputApkFile: File, signLevels: List<Int> = listOf()) {
             logger.info("Signing APK")
+            if (signLevels.isNotEmpty()) signerBuilder?.apply {
+                setV1SigningEnabled(signLevels.contains(1))
+                setV2SigningEnabled(signLevels.contains(2))
+                setV3SigningEnabled(signLevels.contains(3))
+                setV4SigningEnabled(signLevels.contains(4))
+            }
 
             signerBuilder?.setInputApk(inputApkFile)?.setOutputApk(outputApkFile)?.build()?.sign()
         }
